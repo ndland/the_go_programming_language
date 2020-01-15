@@ -5,11 +5,19 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strings"
 )
 
 func main() {
+	var newUrl string
+
 	for _, url := range os.Args[1:] {
-		resp, err := http.Get(url)
+		if !strings.HasPrefix(os.Args[0], "http://") {
+			newUrl = "http://" + url
+		} else {
+			newUrl = url
+		}
+		resp, err := http.Get(newUrl)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Fetch: %v\n", err)
 			os.Exit(1)
